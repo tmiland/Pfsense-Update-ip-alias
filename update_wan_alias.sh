@@ -19,7 +19,7 @@ comma=""
 
 if ifconfig -g "$WAN_GROUP" >/dev/null 2>&1; then
   ALIAS_NAME="$ALIAS_GROUP_NAME"
-  WAN_GROUP=$(ifconfig -g WAN_Group | tr -s '\n' ' ')
+  WAN_GROUP=$(ifconfig -g $WAN_GROUP | tr -s '\n' ' ')
   WAN_INTERFACES=$(echo "$WAN_GROUP")
 fi
 
