@@ -3,10 +3,11 @@
 # Run this script via cron on the pfSense host
 
 # Configuration
+WAN_GROUP="WAN_Group"
 WAN_INTERFACES="igb0 igb1"  # Your WAN interfaces
-ALIAS_NAME="WAN_IPS"                       # Name of the pfSense alias
-ALIAS_DESC="WAN IP Addresses"              # Description for the alias
-TEMP_JSON="/tmp/wan_ips.json"              # Temporary JSON file
+ALIAS_NAME="WAN_Group_Addresses"    # Name of the pfSense alias
+ALIAS_DESC="WAN IP Addresses"       # Description for the alias
+TEMP_JSON="/tmp/wan_ips.json"       # Temporary JSON file
 
 # Main script execution
 echo "$(date): Starting WAN IP alias update script"
@@ -14,6 +15,11 @@ echo "$(date): Starting WAN IP alias update script"
 # Create JSON array to store IPs and descriptions
 echo "[" > $TEMP_JSON
 comma=""
+
+if ifconfig -g "$WAN_GROUP" >/dev/null 2>&1; then
+  WAN_GROUP=$(ifconfig -g WAN_Group | tr -s '\n' ' ')
+  WAN_INTERFACES=$(echo "$WAN_GROUP")
+fi
 
 # Collect IP addresses from all interfaces
 for interface in $WAN_INTERFACES; do
